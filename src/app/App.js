@@ -1,20 +1,22 @@
 import "./App.css";
 import "antd/dist/antd.css";
 
-import { Button, Col, Layout, Modal, Row, Spin } from "antd";
+import { Col, Layout, Modal, Row, Spin } from "antd";
 import React, { Suspense, lazy, useState } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { cancelModal, updateBreadcrumbs, updateModal } from "./app/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-import BreadCrumb from "./components/Navigation/BreadCrumb";
-import CategoriesPage from "./pages/Categories.Page";
-import useAxios from "./utils/useAxios";
+import BreadCrumb from "../components/Navigation/BreadCrumb";
+import PrivateRoutes from "../routes/PrivateRoutes";
+import PublicRoutes from "../routes/PublicRoutes";
+import UnauthorisedPage from "../pages/Unauthorised.Page";
+import { cancelModal } from "./appSlice";
+import useAxios from "../utils/useAxios";
 import { useEffect } from "react";
 
 const { Header, Content, Footer } = Layout;
 
-const ResultNotFoundPage = lazy(() => import("./pages/ResultNotFound.Page"));
+const ResultNotFoundPage = lazy(() => import("../pages/ResultNotFound.Page"));
 const App = () => {
   const { isLoading, modalVisibility, modalTitle, modalFooter, modalContent } =
     useSelector((state) => state.app);
@@ -23,30 +25,30 @@ const App = () => {
   const { axiosGet, axiosPost } = useAxios();
   const [userRoles, setUserRoles] = useState([]);
 
-  useEffect(() => {
-    dispatch(
-      updateModal({
-        modalVisibility: true,
-        modalTitle: "Global modal component",
-        modalFooter: [
-          <Button key="cancel" onClick={cancelModal} size="small">
-            Cancel
-          </Button>,
-          <Button key="submit" type="primary" size="small">
-            Submit
-          </Button>,
-        ],
-        modalContent: (
-          <div>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-          </div>
-        ),
-      })
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   dispatch(
+  //     updateModal({
+  //       modalVisibility: true,
+  //       modalTitle: "Global modal component",
+  //       modalFooter: [
+  //         <Button key="cancel" onClick={cancelModal} size="small">
+  //           Cancel
+  //         </Button>,
+  //         <Button key="submit" type="primary" size="small">
+  //           Submit
+  //         </Button>,
+  //       ],
+  //       modalContent: (
+  //         <div>
+  //           <p>Some contents...</p>
+  //           <p>Some contents...</p>
+  //           <p>Some contents...</p>
+  //         </div>
+  //       ),
+  //     })
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <Layout id="top">
@@ -72,7 +74,7 @@ const App = () => {
           >
             <Header>NavBar</Header>
             <Content className="layout-body">
-              <div>
+              <div className="card-shadow">
                 <Row>
                   <Col
                     xs={22}
@@ -81,16 +83,14 @@ const App = () => {
                     lg={22}
                     xl={22}
                     offset={1}
-                    style={{ backgroundColor: "#ececec" }}
+                    style={{ backgroundColor: "#ececec", padding: 20 }}
                   >
                     <BreadCrumb />
                     Apps
                     <Routes>
-                      <Route path="/" element={<CategoriesPage />}>
-                        <Route path="expenses" element={<div>Expenses</div>} />
-                        <Route path="invoices" element={<div>Invoices</div>} />
-                        <Route component={ResultNotFoundPage} />
-                      </Route>
+                      <Route exact path="/" render={<PublicRoutes />} />
+                      <Route path="/app" component={<PrivateRoutes />} />
+                      <Route path="*" element={<ResultNotFoundPage />} />
                     </Routes>
                   </Col>
                 </Row>
@@ -116,3 +116,10 @@ const App = () => {
 };
 
 export default App;
+
+/* <Route path="/" element={<CategoriesPage />}>
+<Route path="expenses" element={<div>Expenses</div>} />
+<Route path="invoices" element={<div>Invoices</div>} />
+<Route component={ResultNotFoundPage} />
+</Route>
+</Routes> */
