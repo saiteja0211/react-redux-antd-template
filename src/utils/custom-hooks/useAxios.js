@@ -5,6 +5,7 @@ import { updateIsLoading } from "../../app/appSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 
+/* singleton instance */
 const axiosService = (function () {
   let instance;
   const createInstance = () => {
@@ -24,6 +25,8 @@ const axiosService = (function () {
   };
 })();
 
+/* Creating a custom hook for on-demand based server calls, 
+this custom hook returns axios instance and called on your requirement */
 const useAxios = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,7 +36,8 @@ const useAxios = () => {
     (config) => {
       /* customconfig-XXX: no sense to axios but useful to us.
        custom configs are appended with "customconfig-" & passed while making a server call, 
-       to have business logic while request interceptor */
+       to have business logic while request interceptor
+       usage: spinner isn't neccessary for background/sealth server calls  */
       if (!config["customconfig-hideSpinner"]) {
         dispatch(updateIsLoading(true));
       }
