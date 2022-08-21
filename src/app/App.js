@@ -2,29 +2,32 @@ import "./App.css";
 import "antd/dist/antd.css";
 
 import { Col, Layout, Modal, Row, Spin } from "antd";
-import React, { Suspense, lazy, useState } from "react";
+import React, { Suspense, lazy } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  privateRoutes,
+  publicRoutes,
+} from "../role-based-access/access-routes";
 import { useDispatch, useSelector } from "react-redux";
 
 import BreadCrumb from "../components/Navigation/BreadCrumb";
-import PrivateRoutes from "../routes/PrivateRoutes";
-import PublicRoutes from "../routes/PublicRoutes";
-import UnauthorisedPage from "../pages/Unauthorised.Page";
+import Home from "../pages/Home";
+import NavBar from "../components/Navigation/NavBar";
+import PrivateRouteHOC from "../role-based-access/PrivateRouteHOC";
+import ResultNotFound from "../pages/ResultNotFound.Page";
 import { cancelModal } from "./appSlice";
-import useAxios from "../utils/useAxios";
-import { useEffect } from "react";
+import roles from "../role-based-access/roles";
+import useAxios from "../utils/custom-hooks/useAxios";
 
 const { Header, Content, Footer } = Layout;
+const userRoles = [roles.USER];
 
-const ResultNotFoundPage = lazy(() => import("../pages/ResultNotFound.Page"));
 const App = () => {
   const { isLoading, modalVisibility, modalTitle, modalFooter, modalContent } =
     useSelector((state) => state.app);
   const dispatch = useDispatch();
 
-  const { axiosGet, axiosPost } = useAxios();
-  const [userRoles, setUserRoles] = useState([]);
-
+  // const { axiosGet, axiosPost } = useAxios();
   // useEffect(() => {
   //   dispatch(
   //     updateModal({
@@ -72,37 +75,61 @@ const App = () => {
             className="app-spinner"
             // delay={500}
           >
-            <Header>NavBar</Header>
+            <Header>
+              <NavBar />
+            </Header>
             <Content className="layout-body">
-              <div className="card-shadow">
-                <Row>
-                  <Col
-                    xs={22}
-                    sm={22}
-                    md={22}
-                    lg={22}
-                    xl={22}
-                    offset={1}
-                    style={{ backgroundColor: "#ececec", padding: 20 }}
-                  >
-                    <BreadCrumb />
-                    Apps
+              <Row>
+                <Col span={22} offset={1}>
+                  <BreadCrumb />
+
+                  <div style={{ backgroundColor: "#ececec", padding: 10 }}>
                     <Routes>
-                      <Route exact path="/" render={<PublicRoutes />} />
-                      <Route path="/app" component={<PrivateRoutes />} />
-                      <Route path="*" element={<ResultNotFoundPage />} />
+                      <Route exact path="/" title="Home" element={<Home />} />
+
+                      {publicRoutes.map((route) => (
+                        <Route
+                          path={route.path}
+                          title={route.title}
+                          element={<route.component />}
+                        />
+                      ))}
+
+                      {privateRoutes.map((route) => {
+                        const Comp = PrivateRouteHOC({
+                          userRoles,
+                          allowedRoles: route.permission,
+                        })(route.component);
+                        return (
+                          <Route
+                            path={route.path}
+                            title={route.title}
+                            element={<Comp />}
+                          />
+                        );
+                      })}
+
+                      <Route path="*" element={<ResultNotFound />} />
                     </Routes>
-                  </Col>
-                </Row>
-              </div>
+                  </div>
+                </Col>
+              </Row>
             </Content>
-            <Footer>Footer</Footer>
+            <Footer
+              style={{
+                textAlign: "center",
+                backgroundColor: "#fff",
+                marginTop: 10,
+              }}
+            >
+              Footer ©2022
+            </Footer>
           </Spin>
         </Suspense>
       </Router>
 
       <Modal
-        width={"30%"}
+        // width={50%"}
         destroyOnClose={true}
         title={modalTitle}
         footer={modalFooter}
@@ -116,10 +143,3 @@ const App = () => {
 };
 
 export default App;
-
-/* <Route path="/" element={<CategoriesPage />}>
-<Route path="expenses" element={<div>Expenses</div>} />
-<Route path="invoices" element={<div>Invoices</div>} />
-<Route component={ResultNotFoundPage} />
-</Route>
-</Routes> */
