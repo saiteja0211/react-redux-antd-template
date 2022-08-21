@@ -14,17 +14,16 @@ export const appSlice = createSlice({
   initialState,
   reducers: {
     updateIsLoading: (state, action) => {
+      /* Redux Toolkit allows us to write "mutating" logic in reducers. It
+      doesn't actually mutate the state because it uses the Immer library,
+      which detects changes to a "draft state" and produces a brand new
+      immutable state based off those changes */
       state.isLoading = action.payload;
     },
     updateBreadcrumbs: (state, action) => {
       state.breadCrumbItems = action.payload;
     },
     updateModal: (state, action) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      // state.modalVisibility = true;
       state = { ...state, ...action.payload };
       console.log(state);
       return state;
