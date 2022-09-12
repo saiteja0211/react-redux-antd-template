@@ -20,11 +20,17 @@ import roles from "../role-based-access/roles";
 import useAxios from "../utils/custom-hooks/useAxios";
 
 const { Header, Content, Footer } = Layout;
-const userRoles = [roles.USER];
+// const userRoles = [roles.USER];
 
 const App = () => {
-  const { isLoading, modalVisibility, modalTitle, modalFooter, modalContent } =
-    useSelector((state) => state.app);
+  const {
+    isLoading,
+    modalVisibility,
+    modalTitle,
+    modalFooter,
+    modalContent,
+    userRoles,
+  } = useSelector((state) => state.app);
   const dispatch = useDispatch();
 
   // const { axiosGet, axiosPost } = useAxios();
@@ -83,7 +89,13 @@ const App = () => {
                 <Col span={22} offset={1}>
                   <BreadCrumb />
 
-                  <div style={{ backgroundColor: "#ececec", padding: 10 }}>
+                  <div
+                    style={{
+                      backgroundColor: "#ececec",
+                      padding: 10,
+                      minHeight: "80vh",
+                    }}
+                  >
                     <Routes>
                       <Route exact path="/" title="Home" element={<Home />} />
 

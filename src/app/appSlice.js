@@ -4,6 +4,7 @@ const initialState = {
   isLoading: false,
   breadCrumbItems: [],
   modalVisibility: false,
+  userRoles: ["Guest"],
   modalTitle: "",
   modalFooter: "",
   modalContent: "",
@@ -23,6 +24,9 @@ export const appSlice = createSlice({
     updateBreadcrumbs: (state, action) => {
       state.breadCrumbItems = action.payload;
     },
+    updateRole: (state, action) => {
+      state.userRoles = action.payload;
+    },
     updateModal: (state, action) => {
       state = { ...state, ...action.payload };
       console.log(state);
@@ -38,7 +42,12 @@ export const appSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { updateIsLoading, updateBreadcrumbs, updateModal, cancelModal } =
-  appSlice.actions;
+export const {
+  updateIsLoading,
+  updateBreadcrumbs,
+  updateModal,
+  cancelModal,
+  updateRole,
+} = appSlice.actions;
 
 export default appSlice.reducer;

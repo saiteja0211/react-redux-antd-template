@@ -3,7 +3,7 @@ import { Button, Result } from "antd";
 import { useNavigate } from "react-router";
 
 const UnauthorisedPage = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
   return (
     <Result
       style={{ padding: 0 }}
@@ -11,7 +11,7 @@ const UnauthorisedPage = () => {
       title="Sorry... you don't have access to this page."
       subTitle="Don't worry! You can easily go back to the homepage"
       extra={
-        <Button type="primary" onClick={() => history.push("/")}>
+        <Button type="primary" onClick={() => navigate("/")}>
           Back to homepage
         </Button>
       }

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const Guest2Page = (props) => {
-  return <div>Guest1Page</div>;
+  return <div>Guest2 Page</div>;
 };
 
 Guest2Page.propTypes = {};

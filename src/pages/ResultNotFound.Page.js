@@ -1,8 +1,10 @@
+import { Button, Result } from "antd";
+
 import React from "react";
-import { Result, Button } from "antd";
 import { useNavigate } from "react-router-dom";
+
 const ResultNotFoundPage = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <Result
@@ -11,7 +13,7 @@ const ResultNotFoundPage = () => {
       title="Oops... No results found"
       subTitle=" Don't worry! You can easily go back to the homepage"
       extra={
-        <Button type="primary" onClick={() => history.push("/")}>
+        <Button type="primary" onClick={() => navigate("/")}>
           Back to homepage
         </Button>
       }
