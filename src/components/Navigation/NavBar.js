@@ -1,4 +1,4 @@
-import { Button, Col, Dropdown, Menu, Row, Space } from "antd";
+import { Button, Col, Dropdown, Menu, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -7,9 +7,11 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import roles from "../../role-based-access/roles";
 import { updateRole } from "../../app/appSlice";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = (props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const userRoles = useSelector((state) => state.app.userRoles);
 
@@ -24,11 +26,10 @@ const NavBar = (props) => {
   }, []);
 
   const toggleRole = (menuItem) => {
-    console.log(menuItem);
+    navigate("/");
     dispatch(updateRole([menuItem.key]));
   };
 
-  console.log(userRoles);
   return (
     <Row justify="space-between">
       <h3 style={{ color: "#fff" }}>LOGO</h3>
@@ -37,23 +38,23 @@ const NavBar = (props) => {
 
       <Row gutter={20} justify="space-evenly" align="middle">
         <Col>
-          <Link to="/guest1page">Guest1</Link>
+          <Link to="/guest1page">Guest1Page</Link>
         </Col>
         <Col>
-          <Link to="/guest2page">Guest2</Link>
+          <Link to="/guest2page">Guest2Page</Link>
         </Col>
         <Col>
-          <Link to="/userpage">User</Link>
+          <Link to="/userpage">UserPage</Link>
         </Col>
         <Col>
-          <Link to="/managerpage">Manager</Link>
+          <Link to="/managerpage">ManagerPage</Link>
         </Col>
         <Col>
-          <Link to="/adminpage">Admin</Link>
+          <Link to="/adminpage">AdminPage</Link>
         </Col>
 
         <Col>
-          <Link to="/sakcmasklmc">Not Found</Link>
+          <Link to="/sakcmasklmc">Page NotFound</Link>
         </Col>
         <Col>
           <Button onClick={() => {}}></Button>

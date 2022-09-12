@@ -4,7 +4,7 @@ const initialState = {
   isLoading: false,
   breadCrumbItems: [],
   modalVisibility: false,
-  userRoles: ["Guest"],
+  userRoles: ["guest"],
   modalTitle: "",
   modalFooter: "",
   modalContent: "",
@@ -29,7 +29,6 @@ export const appSlice = createSlice({
     },
     updateModal: (state, action) => {
       state = { ...state, ...action.payload };
-      console.log(state);
       return state;
     },
     cancelModal: (state) => {

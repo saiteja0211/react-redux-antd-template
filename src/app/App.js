@@ -2,7 +2,7 @@ import "./App.css";
 import "antd/dist/antd.css";
 
 import { Col, Layout, Modal, Row, Spin } from "antd";
-import React, { Suspense, lazy } from "react";
+import React, { Suspense } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import {
   privateRoutes,
@@ -13,11 +13,11 @@ import { useDispatch, useSelector } from "react-redux";
 import BreadCrumb from "../components/Navigation/BreadCrumb";
 import Home from "../pages/Home";
 import NavBar from "../components/Navigation/NavBar";
-import PrivateRouteHOC from "../role-based-access/PrivateRouteHOC";
+import PrivateRouteComp from "../role-based-access/PrivateRouteComp";
 import ResultNotFound from "../pages/ResultNotFound.Page";
 import { cancelModal } from "./appSlice";
-import roles from "../role-based-access/roles";
-import useAxios from "../utils/custom-hooks/useAxios";
+
+// import useAxios from "../utils/custom-hooks/useAxios";
 
 const { Header, Content, Footer } = Layout;
 // const userRoles = [roles.USER];
@@ -97,26 +97,28 @@ const App = () => {
                     }}
                   >
                     <Routes>
-                      <Route exact path="/" title="Home" element={<Home />} />
+                      <Route path="/" title="Home" element={<Home />} />
 
                       {publicRoutes.map((route) => (
                         <Route
                           path={route.path}
                           title={route.title}
-                          element={<route.component />}
+                          element={<route.component routeTitle={route.title} />}
                         />
                       ))}
 
                       {privateRoutes.map((route) => {
-                        const Comp = PrivateRouteHOC({
+                        const Comp = PrivateRouteComp({
                           userRoles,
                           allowedRoles: route.permission,
-                        })(route.component);
+                          routeTitle: route.title,
+                          component: route.component,
+                        });
                         return (
                           <Route
                             path={route.path}
                             title={route.title}
-                            element={<Comp />}
+                            element={<Comp routeTitle={route.title} />}
                           />
                         );
                       })}

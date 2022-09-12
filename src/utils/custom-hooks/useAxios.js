@@ -35,7 +35,7 @@ const useAxios = () => {
   axios.interceptors.request.use(
     (config) => {
       /* customconfig-XXX: no sense to axios but useful to us.
-       custom configs are appended with "customconfig-" & passed while making a server call, 
+       We are appending custom configs with "customconfig-" & passed while making a server call, 
        to have business logic while request interceptor
        usage: spinner isn't neccessary for background/sealth server calls  */
       if (!config["customconfig-hideSpinner"]) {
@@ -68,7 +68,7 @@ const useAxios = () => {
         errorMessage = error?.response?.data?.message;
       console.error("Server Error:", errorMessage);
 
-      // Global server errors 401,403 are handled here only
+      // Global server errors 401,403 are handled here
       if (status === 401) {
         navigate("login");
         return Promise.reject(error);
