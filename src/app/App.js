@@ -20,7 +20,6 @@ import { cancelModal } from "./appSlice";
 // import useAxios from "../utils/custom-hooks/useAxios";
 
 const { Header, Content, Footer } = Layout;
-// const userRoles = [roles.USER];
 
 const App = () => {
   const {
